@@ -1,0 +1,227 @@
+
+
+const fireString = 'Fire';
+const waterString = 'Water';
+const airString = 'Air';
+const earthString = 'Earth';
+const spiritString = 'Spirit';
+
+Math.clip = function(number, min, max) {
+  return Math.max(min, Math.min(number, max));
+}
+
+function getSpiritStats(spiritType)
+{
+
+  switch (spiritType) {
+  case fireString:
+    return {body: 1, agility: 2, reaction: 3,strength:-2, willpower: 0, logic: 0, intuition: 1, charisma: 0, initiative: 3,
+            assensing: true, astral_combat: true, exotic_range: true, perception: true, unarmed_combat: true};
+  default:
+    return {body: 0, agility: 0, reaction: 0,strength: 0, willpower: 0, logic: 0, intuition: 0, charisma: 0, initiative: 0};
+    }
+}
+
+function getSpiritPowers(spiritType, force)
+{
+    let powers = [];
+    switch(spiritType){
+      case fireString:
+        powers.push(getPower("engulf", spiritType, force));
+        //powers.push(getPower("astral_form"), spiritType, force);
+    }
+    return powers;
+    //canvas.tokens.controlled[0].actor.createOwnedItem({name:"heh4", type:"adept_power", data: {action:{type:"complex", attribute: "willpower", attribute2: "magic", opposed: {type:"custom", attribute: "reaction", attribute2: "intuition"}}}})
+}
+
+function getPower(name, spiritType, force)
+{
+  switch(name){
+      case "accident":
+        return {
+          name:"accident", type:"adept_power", 
+          data: { 
+            description:{source:"CRB394"},
+            action:{
+              type:"complex", attribute: "willpower", attribute2: "magic", 
+              opposed: {type:"custom", attribute: "reaction", attribute2: "intuition"}}
+          }
+        };
+      case "astral_form":
+        return {
+          name:"Astral Form", type:"adept_power", 
+          data: { 
+            description:{source:"CRB394"}
+          }
+        }
+      case "confusion":
+        return {
+          name:"Astral Form", type:"adept_power", 
+          data: { 
+            description:{source:"CRB394"}
+          }
+        }
+        case "elemental_attack":
+        return {
+          name:"Elemental Attack", type:"adept_power", 
+          data: { 
+            description:{source:"CRB396"},
+            action:{
+              type:"complex", skill: "exotic_ranged", attribute: "agility",
+              opposed: {type:"defense"},
+              limit: {attribute: "physical"}}
+          }
+        }
+        case "energy aura":
+        return {
+          name:"Astral Form", type:"adept_power", 
+          data: { 
+            description:{source:"CRB396"}
+          }
+          //TODO add the damage to unarmed somehow
+        }
+      case "engulf":
+        return {
+          name:"Engulf", type:"adept_power", 
+          data: { 
+            description:{source:"CRB396"},
+            action:{
+              type:"complex", skill: "unarmed_combat", attribute: "agility",
+              opposed: {type:"defense"},
+              limit: {attribute: "physical"}, 
+              damage: {type: "physical", base: force, attribute: "magic", ap: {base:force}}
+              }
+          }
+        }
+      case "fear":
+        return {
+          name:"Fear", type:"adept_power", 
+          data: { 
+            description:{source:"CRB397"},
+            action:{
+              type:"complex", attribute: "willpower", attribute2: "magic", 
+              opposed: {type:"custom", attribute: "willpower", attribute2: "logic"}}
+          }
+        }
+      case "guard":
+        return {
+          name:"Guard", type:"adept_power", 
+          data: { 
+            description:{source:"CRB397"}
+          }
+        }
+      case "materialization":
+        return {
+          name:"Materialization", type:"adept_power", 
+          data: { 
+            description:{source:"CRB398"}
+          }
+        }
+      case "noxious_breath":
+        return {
+          name:"Noxious Breath", type:"adept_power", 
+          data: { 
+            description:{source:"CRB399"},
+            action:{
+              type:"complex", skill: "exotic_ranged", attribute: "agility",
+              opposed: {type:"defense"},
+              limit: {attribute: "physical"}}
+          }
+        }
+      case "sapience":
+        return {
+          name:"Sapience", type:"adept_power", 
+          data: { 
+            description:{source:"CRB400"}
+          }
+        }
+      case "search":
+        return {
+          name:"Search", type:"adept_power", 
+          data: { 
+            description:{source:"CRB400"},
+            action:{
+              type:"complex", attribute: "intuition", attribute2: "magic", extended: true}
+          }
+        }
+        default:
+          return { name:"Undefined", type:"adept_power"};
+    }
+}
+
+function macroAsync() {
+
+    const summon = async function(html) {
+        
+        let force = parseInt(html.find('[id="force"]').val());
+        Math.clip(force, 1, 50);
+        const spiritType = html.find('[id="spiritType"]').val();
+        let attributes = getSpiritStats(spiritType);
+
+        let spiritActor = await Actor.create({
+          type: "character", 
+          name : spiritType + ' Force ' + force, 
+          data: {
+            special: "magic",
+            attributes: {
+              body: { base: Math.clip(attributes["body"] + force, 1, 99)},
+              agility: { base: Math.clip(attributes["agility"] + force, 1, 99)},
+              reaction: { base: Math.clip(attributes["reaction"] + force, 1, 99)},
+              strength: { base: Math.clip(attributes["strength"] + force, 1, 99)},
+              willpower: { base: Math.clip(attributes["willpower"] + force, 1, 99)},
+              logic: { base: Math.clip(attributes["logic"] + force, 1, 99)},
+              intuition: { base: Math.clip(attributes["intuition"] + force, 1, 99)},
+              charisma: { base: Math.clip(attributes["charisma"] + force, 1, 99)},
+              edge: {base: Math.floor(force / 2)},
+              magic: { base: force }
+            },
+            skills: { 
+              active: {
+                assensing: {base: "assensing" in attributes? force: 0 },
+                astral_combat: {base: "astral_combat" in attributes? force: 0 },
+                exotic_range: {base: "exotic_range" in attributes? force: 0 },
+                perception: {base: "perception" in attributes? force: 0 },
+                unarmed_combat: {base: "unarmed_combat" in attributes? force: 0 },
+              }
+            },
+            modifiers: {
+              initiative: attributes["initiative"],
+              initiative_dice: 1
+            }
+          }
+        
+        })
+
+        for (let powerData of getSpiritPowers(spiritType, force)) 
+          spiritActor.createOwnedItem(powerData);
+        
+};
+
+let d = new Dialog({
+  title: "Summoning",
+  content: `<form>
+    <div class="form-group"><label>Force</label><input id='force' value='1'></input></div>
+    <div class="form-group"><label>Number</label><select name="spiritType" id='spiritType'>
+        <option value =${fireString}>${fireString} </option>
+        <option value =${waterString}>${waterString}</option>
+        <option value =${earthString}>${earthString}</option>
+        <option value =${airString}>${airString}</option>
+    </select> 
+  </form>`,
+  buttons: {
+    one: {
+        label: "Ok",
+        callback: html => summon(html)
+    },
+    two: {
+        label: "Cancel",
+        callback: html => console.log("SKILL-MACRO: Cancelled")
+    }
+  },
+  close: html => console.log()
+  });
+  
+  d.render(true);
+}
+
+spiritActor = macroAsync();
