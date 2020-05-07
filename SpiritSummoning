@@ -116,6 +116,16 @@ function getSpiritPowers(spiritType, force) {
             powers.push(getOptionalPower("venom", spiritType, force));
             break;
         case manString:
+            powers.push(getPower("accident", spiritType, force));
+            powers.push(getPower("astral_form", spiritType, force));
+            powers.push(getPower("concealment", spiritType, force));
+            powers.push(getPower("confusion", spiritType, force));
+            powers.push(getPower("enhanced_senses", spiritType, force)); //TODO: create a separate enhanced_senses
+            powers.push(getPower("guard", spiritType, force));
+            //powers.push(getPower("influence", spiritType, force));
+            powers.push(getPower("materialization", spiritType, force));
+            powers.push(getPower("sapience", spiritType, force));
+            powers.push(getPower("search", spiritType, force));
             break;
         case waterString:
             break;
