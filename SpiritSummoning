@@ -47,6 +47,26 @@ function getSpiritStats(spiritType) {
                 agility: 1, reaction: 2, initiative: 2,
                 assensing: true, astral_combat: true, exotic_range: true, perception: true, unarmed_combat: true
             };
+        case guardianString:
+            return {
+                body: 1, agility: 2, reaction: 3, strength: 2, 
+                assensing: true, astral_combat: true, blades: true, clubs: true, counterspelling: true, exotic_range: true, perception: true, unarmed_combat: true
+            };
+        case guidanceString:
+            return {
+                body: 3, agility: -1, reaction: 2, strength: 1, initiative: 2,
+                arcana: true, assensing: true, astral_combat: true, counterspelling: true, perception: true, unarmed_combat: true
+            };
+        case plantString:
+            return {
+                body: 2, agility: -1, strength: 1, logic: -1,
+                assensing: true, astral_combat: true, counterspelling: true, exotic_range: true, perception: true, unarmed_combat: true
+            };
+        case taskString:
+            return {
+                reaction: 2, strength: 2, initiative: 2,
+                artisan: true, assensing: true, astral_combat: true, perception: true, unarmed_combat: true
+            };
         default:
             return { body: 0, agility: 0, reaction: 0, strength: 0, willpower: 0, logic: 0, intuition: 0, charisma: 0, initiative: 0 };
     }
@@ -68,7 +88,6 @@ function getSpiritPowers(spiritType, force) {
         return powers;
     }
 
-    let powers = [];
     switch (spiritType) {
         case fireString:
             return getPowers(
@@ -94,8 +113,23 @@ function getSpiritPowers(spiritType, force) {
             return getPowers(
                 ["astral_form", "concealment", "confusion", "engulf", "materialization", "movement", "sapience", "search"],
                 ["accident", "binding", "elemental_attack", "energy_aura", "guard", "weather control"], spiritType, force);
+        case guardianString:
+            return getPowers(
+                [],
+                [], spiritType, force);
+        case guidanceString:
+            return getPowers(
+                [],
+                [], spiritType, force);
+        case plantString:
+            return getPowers(
+                [],
+                [], spiritType, force);
+        case taskString:
+            return getPowers(
+                [],
+                [], spiritType, force);
     }
-    return powers;
 }
 function getPowerData(name, spiritType, force) {
     switch (name) {
@@ -369,7 +403,12 @@ async function macroAsync() {
                 skills: {
                     active: {
                         assensing: { base: "assensing" in attributes ? force : 0 },
+                        arcana: { base: "arcana" in attributes ? force : 0 },
+                        artisan: { base: "artisan" in attributes ? force : 0 },
                         astral_combat: { base: "astral_combat" in attributes ? force : 0 },
+                        blades: { base: "blades" in attributes ? force : 0 },
+                        clubs: { base: "clubs" in attributes ? force : 0 },
+                        counterspelling: { base: "counterspelling" in attributes ? force : 0 },
                         exotic_range: { base: "exotic_range" in attributes ? force : 0 },
                         perception: { base: "perception" in attributes ? force : 0 },
                         running: { base: "running" in attributes ? force : 0 },
