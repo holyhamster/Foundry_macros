@@ -122,7 +122,6 @@ function getSpiritPowers(spiritType, force) {
 
     }
     return powers;
-    //canvas.tokens.controlled[0].actor.createOwnedItem({name:"heh4", type:"adept_power", data: {action:{type:"complex", attribute: "willpower", attribute2: "magic", opposed: {type:"custom", attribute: "reaction", attribute2: "intuition"}}}})
 }
 
 function getPower(name, spiritType, force) {
@@ -185,7 +184,8 @@ function getPower(name, spiritType, force) {
                     action: {
                         type: "complex", skill: "exotic_range", attribute: "agility",
                         opposed: { type: "defense" },
-                        limit: { attribute: "physical" }
+                        limit: { attribute: "physical" },
+                        damage: { type: "physical", base: force, attribute: "magic", ap: { base: force }, element: spiritType }
                     }
                 }
             }
@@ -314,6 +314,19 @@ function getPower(name, spiritType, force) {
             return { name: "Undefined", type: "adept_power" };
     }
 }
+async function drainRoll(actor, spirit, force)
+{
+    game.shadowrun5e.DiceSR.d6({
+        actor: spirit,
+        event: {shiftKey: true, altKey:true},
+        count: force,
+        dialogOptions: {prompt:true},
+        wounds: false,
+        title: "Summoning Resistance"});
+    
+    //actor.rollDrain({event: {shiftKey: true, altKey:true}});
+    //TODO: add drain roll if actor != null
+}
 
 function getOptionalPower(name)
 {
@@ -322,7 +335,8 @@ function getOptionalPower(name)
     return power;
 }
 
-function macroAsync() {
+//main body
+async function macroAsync() {
 
     const summon = async function (html) {
 
@@ -368,17 +382,39 @@ function macroAsync() {
 
         for (let powerData of getSpiritPowers(spiritType, force))
             spiritActor.createOwnedItem(powerData);
+        spiritActor.data["img"] = "Content/Tokens/Monster/" + spiritType + "_spirit.png";
+        spiritActor.data.token["img"] = spiritActor.data["img"];
 
+        spiritActor.data.permission[Gamepad.userID] = 3;
+        
+        canvas.tokens.dropActor(spiritActor,  {
+            x: canvas.tokens.controlled[0].actor.token.data.x,
+            y: canvas.tokens.controlled[0].actor.token.data.y + 100
+          });
+
+        let summoningActor;
+        //if (game.user.character)
+        //{
+            //summoningActor = game.user.character.actor;
+        //}
+        //else (canvas.tokens.controlled.length > 0)
+        //{
+            //summoningActor = canvas.tokens.controlled[0].actor;
+        //}
+        //if (summoningActor != null)
+        drainRoll(summoningActor, spiritActor, force);
+        
     };
 
+    
     let d = new Dialog({
         title: "Summoning",
         content:`<form><div class="form-group"><label>Force</label><input id='force' value='1'></input></div><div class="form-group"><label>Number</label>
         <select name="spiritType" id='spiritType'>
-        <option value =${fireString}>${fireString}</option>
         <option value =${waterString}>${waterString}</option>
         <option value =${earthString}>${earthString}</option>
         <option value =${airString}>${airString}</option>
+        <option value =${fireString}>${fireString}</option>
         <option value =${beastString}>${beastString}</option>
         <option value =${manString}>${manString}</option>
         <option value =${guardianString}>${guardianString}</option>
