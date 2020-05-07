@@ -2,7 +2,12 @@ const fireString = 'Fire';
 const waterString = 'Water';
 const airString = 'Air';
 const earthString = 'Earth';
-const spiritString = 'Spirit';
+const manString = 'Man';
+const beastString = 'Beast';
+const guardianString = 'Guardian';
+const guidanceString = 'Guidance';
+const plantString = 'Plant';
+const taskString = 'Task';
 
 Math.clip = function (number, min, max) {
     return Math.max(min, Math.min(number, max));
@@ -11,9 +16,34 @@ Math.clip = function (number, min, max) {
 function getSpiritStats(spiritType) {
 
     switch (spiritType) {
+        case airString:
+            return {
+                body: -2, agility: 3, reaction: 4, strength: -3, initiative: 4,
+                assensing: true, astral_combat: true, exotic_range: true, perception: true, running: true, unarmed_combat: true
+            };
+        case earthString:
+            return {
+                body: 4, agility: -2, reaction: -1, strength: 4, logic: -1, initiative: -1,
+                assensing: true, astral_combat: true, exotic_range: true, perception: true, unarmed_combat: true
+            };
         case fireString:
             return {
-                body: 1, agility: 2, reaction: 3, strength: -2, willpower: 0, logic: 0, intuition: 1, charisma: 0, initiative: 3,
+                body: 1, agility: 2, reaction: 3, strength: -2, intuition: 1, initiative: 3,
+                assensing: true, astral_combat: true, exotic_range: true, perception: true, unarmed_combat: true
+            };
+        case beastString:
+            return {
+                body: 2, agility: 1, strength: 2,
+                assensing: true, astral_combat: true, perception: true, unarmed_combat: true
+            };
+        case manString:
+            return {
+                body: 1, reaction: 2, strength: -2, intuition: 1, initiative: 2,
+                assensing: true, astral_combat: true, perception: true, spellcasting: true, unarmed_combat: true
+            };
+        case waterString:
+            return {
+                agility: 1, reaction: 2, initiative: 2,
                 assensing: true, astral_combat: true, exotic_range: true, perception: true, unarmed_combat: true
             };
         default:
@@ -25,8 +55,71 @@ function getSpiritPowers(spiritType, force) {
     let powers = [];
     switch (spiritType) {
         case fireString:
+            powers.push(getPower("accident", spiritType, force));
+            powers.push(getPower("astral_form", spiritType, force));
+            powers.push(getPower("confusion", spiritType, force));
+            powers.push(getPower("elemental_attack", spiritType, force));
+            powers.push(getPower("energy_aura", spiritType, force));
             powers.push(getPower("engulf", spiritType, force));
-        //powers.push(getPower("astral_form"), spiritType, force);
+            powers.push(getPower("materialization", spiritType, force));
+            powers.push(getPower("sapience", spiritType, force));
+            powers.push(getOptionalPower("fear", spiritType, force));
+            powers.push(getOptionalPower("guard", spiritType, force));
+            powers.push(getOptionalPower("noxious_breath", spiritType, force));
+            powers.push(getOptionalPower("search", spiritType, force));
+            break;
+        case airString:
+            powers.push(getPower("accident", spiritType, force));
+            powers.push(getPower("astral_form", spiritType, force));
+            powers.push(getPower("concealment", spiritType, force));
+            powers.push(getPower("confusion", spiritType, force));
+            powers.push(getPower("engulf", spiritType, force));
+            powers.push(getPower("materialization", spiritType, force));
+            powers.push(getPower("movement", spiritType, force));
+            powers.push(getPower("sapience", spiritType, force));
+            powers.push(getPower("search", spiritType, force));
+            powers.push(getOptionalPower("elemental_attack", spiritType, force));
+            powers.push(getOptionalPower("energy_aura", spiritType, force));
+            powers.push(getOptionalPower("fear", spiritType, force));
+            powers.push(getOptionalPower("guard", spiritType, force));
+            powers.push(getOptionalPower("noxious_breath", spiritType, force));
+            powers.push(getOptionalPower("psychokinesis", spiritType, force));
+            break;
+        case earthString:
+            powers.push(getPower("astral_form", spiritType, force));
+            powers.push(getPower("binding", spiritType, force));
+            powers.push(getPower("guard", spiritType, force));
+            powers.push(getPower("materialization", spiritType, force));
+            powers.push(getPower("movement", spiritType, force));
+            powers.push(getPower("sapience", spiritType, force));
+            powers.push(getPower("search", spiritType, force));
+            powers.push(getOptionalPower("concealment", spiritType, force));
+            powers.push(getOptionalPower("confusion", spiritType, force));
+            powers.push(getOptionalPower("engulf", spiritType, force));
+            powers.push(getOptionalPower("elemental_attack", spiritType, force));
+            powers.push(getOptionalPower("fear", spiritType, force));
+            break;
+        case beastString:
+            powers.push(getPower("animal_control", spiritType, force));
+            powers.push(getPower("astral_form", spiritType, force));
+            powers.push(getPower("enhanced_senses", spiritType, force));
+            powers.push(getPower("fear", spiritType, force));
+            powers.push(getPower("materialization", spiritType, force));
+            powers.push(getPower("movement", spiritType, force));
+            powers.push(getPower("sapience", spiritType, force));
+            powers.push(getOptionalPower("concealment", spiritType, force));
+            powers.push(getOptionalPower("confusion", spiritType, force));
+            powers.push(getOptionalPower("guard", spiritType, force));
+            powers.push(getOptionalPower("natural_weapon", spiritType, force));
+            powers.push(getOptionalPower("noxious_breath", spiritType, force));
+            powers.push(getOptionalPower("search", spiritType, force));
+            powers.push(getOptionalPower("venom", spiritType, force));
+            break;
+        case manString:
+            break;
+        case waterString:
+            break;
+
     }
     return powers;
     //canvas.tokens.controlled[0].actor.createOwnedItem({name:"heh4", type:"adept_power", data: {action:{type:"complex", attribute: "willpower", attribute2: "magic", opposed: {type:"custom", attribute: "reaction", attribute2: "intuition"}}}})
@@ -36,7 +129,7 @@ function getPower(name, spiritType, force) {
     switch (name) {
         case "accident":
             return {
-                name: "accident", type: "adept_power",
+                name: "Accident", type: "adept_power",
                 data: {
                     description: { source: "CRB394" },
                     action: {
@@ -45,6 +138,13 @@ function getPower(name, spiritType, force) {
                     }
                 }
             };
+        case "animal_control":
+            return {
+                name: "Animal Control", type: "adept_power",
+                data: {
+                    description: { source: "CRB394" }
+                }
+            }
         case "astral_form":
             return {
                 name: "Astral Form", type: "adept_power",
@@ -52,11 +152,29 @@ function getPower(name, spiritType, force) {
                     description: { source: "CRB394" }
                 }
             }
+        case "binding":
+                return {
+                    name: "Binding", type: "adept_power",
+                    data: {
+                        description: { source: "CRB395" },
+                    }
+                }
         case "confusion":
             return {
-                name: "Astral Form", type: "adept_power",
+                name: "Confusion", type: "adept_power",
                 data: {
-                    description: { source: "CRB394" }
+                    description: { source: "CRB395" },
+                    action: {
+                        type: "complex", attribute: "willpower", attribute2: "magic",
+                        opposed: { type: "custom", attribute: "willpower", attribute2: "logic" }
+                    }
+                }
+            }
+        case "concealment":
+            return {
+                name: "Concealment", type: "adept_power",
+                data: {
+                    description: { source: "CRB395" }
                 }
             }
         case "elemental_attack":
@@ -65,19 +183,24 @@ function getPower(name, spiritType, force) {
                 data: {
                     description: { source: "CRB396" },
                     action: {
-                        type: "complex", skill: "exotic_ranged", attribute: "agility",
+                        type: "complex", skill: "exotic_range", attribute: "agility",
                         opposed: { type: "defense" },
                         limit: { attribute: "physical" }
                     }
                 }
             }
-        case "energy aura":
+        case "energy_aura":
             return {
-                name: "Astral Form", type: "adept_power",
+                name: "Energy Aura", type: "adept_power",
                 data: {
-                    description: { source: "CRB396" }
+                    description: { source: "CRB396" },
+                    action: {
+                        type: "complex", skill: "unarmed_combat", attribute: "agility",
+                        opposed: { type: "defense" },
+                        limit: { attribute: "physical" },
+                        damage: { type: "physical", base: force, attribute: "strength", ap: { base: force } }
+                    }
                 }
-                //TODO add the damage to unarmed somehow
             }
         case "engulf":
             return {
@@ -92,6 +215,13 @@ function getPower(name, spiritType, force) {
                     }
                 }
             }
+        case "enhanced_senses":
+                return {
+                    name: "Enhanced Senses(Hearing, Low-light, Smell)", type: "adept_power",
+                    data: {
+                        description: { source: "CRB396" },
+                    }
+                }
         case "fear":
             return {
                 name: "Fear", type: "adept_power",
@@ -117,18 +247,45 @@ function getPower(name, spiritType, force) {
                     description: { source: "CRB398" }
                 }
             }
+        case "movement":
+            return {
+                name: "Movement", type: "adept_power",
+                data: {
+                    description: { source: "CRB399" },
+                    action: {
+                        type: "complex", attribute: "willpower", attribute2: "magic"
+                    }
+                }
+            };
+        case "natural_weapon":
+            return {
+                name: "Natural Weapon", type: "adept_power",
+                data: {
+                    description: { source: "CRB399" }
+                }
+            }
         case "noxious_breath":
             return {
                 name: "Noxious Breath", type: "adept_power",
                 data: {
                     description: { source: "CRB399" },
                     action: {
-                        type: "complex", skill: "exotic_ranged", attribute: "agility",
+                        type: "complex", skill: "exotic_range", attribute: "agility",
                         opposed: { type: "defense" },
                         limit: { attribute: "physical" }
                     }
                 }
             }
+        case "psychokinesis":
+            return {
+                name: "Psychokinesis", type: "adept_power",
+                data: {
+                    description: { source: "CRB400" },
+                    action: {
+                        type: "complex", attribute: "willpower", attribute2: "magic"
+                    }
+                }
+            };
         case "sapience":
             return {
                 name: "Sapience", type: "adept_power",
@@ -146,9 +303,23 @@ function getPower(name, spiritType, force) {
                     }
                 }
             }
+        case "venom":
+                return {
+                    name: "Venom", type: "adept_power",
+                    data: {
+                        description: { source: "CRB401" }
+                    }
+                }
         default:
             return { name: "Undefined", type: "adept_power" };
     }
+}
+
+function getOptionalPower(name)
+{
+    let power = getPower(name);
+    power["name"] = power["name"] + " (Optional)";
+    return power;
 }
 
 function macroAsync() {
@@ -166,14 +337,14 @@ function macroAsync() {
             data: {
                 special: "magic",
                 attributes: {
-                    body: { base: Math.clip(attributes["body"] + force, 1, 99) },
-                    agility: { base: Math.clip(attributes["agility"] + force, 1, 99) },
-                    reaction: { base: Math.clip(attributes["reaction"] + force, 1, 99) },
-                    strength: { base: Math.clip(attributes["strength"] + force, 1, 99) },
-                    willpower: { base: Math.clip(attributes["willpower"] + force, 1, 99) },
-                    logic: { base: Math.clip(attributes["logic"] + force, 1, 99) },
-                    intuition: { base: Math.clip(attributes["intuition"] + force, 1, 99) },
-                    charisma: { base: Math.clip(attributes["charisma"] + force, 1, 99) },
+                    body: { base: Math.clip("body" in attributes? attributes["body"] + force: force, 1, 99) },
+                    agility: { base: Math.clip("agility" in attributes? attributes["agility"] + force: force, 1, 99) },
+                    reaction: { base: Math.clip("reaction" in attributes? attributes["reaction"] + force: force, 1, 99) },
+                    strength: { base: Math.clip("strength" in attributes? attributes["strength"] + force: force, 1, 99) },
+                    willpower: { base: Math.clip("willpower" in attributes? attributes["willpower"] + force: force, 1, 99) },
+                    logic: { base: Math.clip("logic" in attributes? attributes["logic"] + force: force, 1, 99) },
+                    intuition: { base: Math.clip("intuition" in attributes? attributes["intuition"] + force: force, 1, 99) },
+                    charisma: { base: Math.clip("charisma" in attributes? attributes["charisma"] + force: force, 1, 99) },
                     edge: { base: Math.floor(force / 2) },
                     magic: { base: force }
                 },
@@ -183,11 +354,12 @@ function macroAsync() {
                         astral_combat: { base: "astral_combat" in attributes ? force : 0 },
                         exotic_range: { base: "exotic_range" in attributes ? force : 0 },
                         perception: { base: "perception" in attributes ? force : 0 },
-                        unarmed_combat: { base: "unarmed_combat" in attributes ? force : 0 },
+                        running: { base: "running" in attributes ? force : 0 },
+                        unarmed_combat: { base: "unarmed_combat" in attributes ? force : 0 }
                     }
                 },
                 modifiers: {
-                    initiative: attributes["initiative"],
+                    initiative: "initiative" in attributes? attributes["initiative"] : 0,
                     initiative_dice: 1
                 }
             }
@@ -201,7 +373,19 @@ function macroAsync() {
 
     let d = new Dialog({
         title: "Summoning",
-        content:`<form><div class="form-group"><label>Force</label><input id='force' value='1'></input></div><div class="form-group"><label>Number</label><select name="spiritType" id='spiritType'><option value =${fireString}>${fireString}</option><option value =${waterString}>${waterString}</option><option value =${earthString}>${earthString}</option><option value =${airString}>${airString}</option></select></div></form>`,
+        content:`<form><div class="form-group"><label>Force</label><input id='force' value='1'></input></div><div class="form-group"><label>Number</label>
+        <select name="spiritType" id='spiritType'>
+        <option value =${fireString}>${fireString}</option>
+        <option value =${waterString}>${waterString}</option>
+        <option value =${earthString}>${earthString}</option>
+        <option value =${airString}>${airString}</option>
+        <option value =${beastString}>${beastString}</option>
+        <option value =${manString}>${manString}</option>
+        <option value =${guardianString}>${guardianString}</option>
+        <option value =${guidanceString}>${guidanceString}</option>
+        <option value =${plantString}>${plantString}</option>
+        <option value =${taskString}>${taskString}</option>
+        </select></div></form>`,
             buttons: {
         one: {
             label: "Ok",
