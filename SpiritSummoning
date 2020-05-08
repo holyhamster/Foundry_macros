@@ -8,28 +8,40 @@ const guardianString = 'Guardian';
 const guidanceString = 'Guidance';
 const plantString = 'Plant';
 const taskString = 'Task';
+//write in here your paths for default icons
+const tokenPaths = {
+    fireString: "Content/Tokens/Monster/Fire_spirit.png",
+    waterString: "Content/Tokens/Monster/Water_spirit.png",
+    airString: "Content/Tokens/Monster/Air_spirit.png",
+    earthString: "Content/Tokens/Monster/Earth_spirit.png",
+    manString: "Content/Tokens/Monster/Man_spirit.png",
+    beastString: "Content/Tokens/Monster/Beast_spirit.png",
+    guardianString: "Content/Tokens/Monster/Guardian_spirit.png",
+    plantString: "Content/Tokens/Monster/Plant_spirit.png",
+    taskString: "Content/Tokens/Monster/Task_spirit.png",};
 
 Math.clip = function (number, min, max) {
     return Math.max(min, Math.min(number, max));
 }
 
 //spirit attributes and skills
+//stats are modifiers to Force, initiative number acts as a modifier to reaction+intuition
 function getSpiritStats(spiritType) {
 
     switch (spiritType) {
         case airString:
             return {
-                body: -2, agility: 3, reaction: 4, strength: -3, initiative: 4,
+                body: -2, agility: 3, reaction: 4, strength: -3,
                 assensing: true, astral_combat: true, exotic_range: true, perception: true, running: true, unarmed_combat: true
             };
         case earthString:
             return {
-                body: 4, agility: -2, reaction: -1, strength: 4, logic: -1, initiative: -1,
+                body: 4, agility: -2, reaction: -1, strength: 4, logic: -1,
                 assensing: true, astral_combat: true, exotic_range: true, perception: true, unarmed_combat: true
             };
         case fireString:
             return {
-                body: 1, agility: 2, reaction: 3, strength: -2, intuition: 1, initiative: 3,
+                body: 1, agility: 2, reaction: 3, strength: -2, intuition: 1, initiative: -1,
                 assensing: true, astral_combat: true, exotic_range: true, perception: true, unarmed_combat: true
             };
         case beastString:
@@ -39,22 +51,22 @@ function getSpiritStats(spiritType) {
             };
         case manString:
             return {
-                body: 1, reaction: 2, strength: -2, intuition: 1, initiative: 2,
+                body: 1, reaction: 2, strength: -2, intuition: 1, initiative: 1,
                 assensing: true, astral_combat: true, perception: true, spellcasting: true, unarmed_combat: true
             };
         case waterString:
             return {
-                agility: 1, reaction: 2, initiative: 2,
+                agility: 1, reaction: 2,
                 assensing: true, astral_combat: true, exotic_range: true, perception: true, unarmed_combat: true
             };
         case guardianString:
             return {
-                body: 1, agility: 2, reaction: 3, strength: 2, 
+                body: 1, agility: 2, reaction: 3, strength: 2, intiative: -2,
                 assensing: true, astral_combat: true, blades: true, clubs: true, counterspelling: true, exotic_range: true, perception: true, unarmed_combat: true
             };
         case guidanceString:
             return {
-                body: 3, agility: -1, reaction: 2, strength: 1, initiative: 2,
+                body: 3, agility: -1, reaction: 2, strength: 1, initiative: -2,
                 arcana: true, assensing: true, astral_combat: true, counterspelling: true, perception: true, unarmed_combat: true
             };
         case plantString:
@@ -64,7 +76,7 @@ function getSpiritStats(spiritType) {
             };
         case taskString:
             return {
-                reaction: 2, strength: 2, initiative: 2,
+                reaction: 2, strength: 2, 
                 artisan: true, assensing: true, astral_combat: true, perception: true, unarmed_combat: true
             };
         default:
@@ -72,7 +84,7 @@ function getSpiritStats(spiritType) {
     }
 }
 
-//spirit powers
+//list of spirit powers
 function getSpiritPowers(spiritType, force) {
     let getPowers = function (normalPowers, optionalPowers, spiritType, force) {
         let powers = [];
@@ -115,12 +127,12 @@ function getSpiritPowers(spiritType, force) {
                 ["accident", "binding", "elemental_attack", "energy_aura", "guard", "weather control"], spiritType, force);
         case guardianString:
             return getPowers(
-                [],
-                [], spiritType, force);
+                ["astral_form", "fear", "guard", "magical_guard", "materialization", "movement", "sapience" ],
+                ["animal_control", "concealment", "elemental_attack",  "natural_weapon",  "psychokinesis", "combat_skill" ], spiritType, force);
         case guidanceString:
             return getPowers(
-                [],
-                [], spiritType, force);
+                ["astral_form",  "confusion", "divining", "guard", "magical_guard", "materialization", "sapience", "search", "shadow_cloak"],
+                ["engulf", "enhanced_senses", "fear", "influence"], spiritType, force);
         case plantString:
             return getPowers(
                 [],
@@ -131,6 +143,9 @@ function getSpiritPowers(spiritType, force) {
                 [], spiritType, force);
     }
 }
+MG, combat skill, divining, shadow_cloak, enhanced_senses2
+
+//data for power's actions
 function getPowerData(name, spiritType, force) {
     switch (name) {
         case "accident":
@@ -183,6 +198,7 @@ function getPowerData(name, spiritType, force) {
                     description: { source: "CRB395" }
                 }
             }
+        //TODO: add damage element if applicable
         case "elemental_attack":
             return {
                 name: "Elemental Attack", type: "adept_power",
@@ -192,7 +208,7 @@ function getPowerData(name, spiritType, force) {
                         type: "complex", skill: "exotic_range", attribute: "agility",
                         opposed: { type: "defense" },
                         limit: { attribute: "physical" },
-                        damage: { type: "physical", base: force, attribute: "magic", ap: { base: force }, element: spiritType }
+                        damage: { type: "physical", base: force, attribute: "magic", ap: { base: force } }// element: spiritType }
                     }
                 }
             }
@@ -264,6 +280,7 @@ function getPowerData(name, spiritType, force) {
                     }
                 }
             };
+        //TODO: add rollable action
         case "natural_weapon":
             return {
                 name: "Natural Weapon", type: "adept_power",
@@ -331,6 +348,7 @@ function getPowerData(name, spiritType, force) {
                     }
                 }
             }
+        //TODO: add rollable action
         case "venom":
                 return {
                     name: "Venom", type: "adept_power",
@@ -352,7 +370,9 @@ function getPowerData(name, spiritType, force) {
             return { name: "Undefined", type: "adept_power" };
     }
 }
-async function drainRoll(actor, spirit, force)
+
+//simple roll in chat to resist the summoning
+async function resistRoll(spirit, force)
 {
     game.shadowrun5e.DiceSR.d6({
         actor: spirit,
@@ -361,20 +381,12 @@ async function drainRoll(actor, spirit, force)
         dialogOptions: {prompt:true},
         wounds: false,
         title: "Summoning Resistance"});
-    
-    //actor.rollDrain({event: {shiftKey: true, altKey:true}});
-    //TODO: add drain roll if actor != null
+
 }
 
-function getOptionalPower(name)
-{
-    let power = getPower(name);
-    power["name"] = power["name"] + " (Optional)";
-    return power;
-}
 
-//main body
-async function macroAsync() {
+
+async function mainAsync() {
 
     const summon = async function (html) {
 
@@ -417,6 +429,7 @@ async function macroAsync() {
                     }
                 },
                 modifiers: {
+                    armor: force * 2,
                     initiative: "initiative" in attributes? attributes["initiative"] : 0,
                     initiative_dice: 1
                 }
@@ -426,31 +439,36 @@ async function macroAsync() {
 
         for (let powerData of getSpiritPowers(spiritType, force))
             spiritActor.createOwnedItem(powerData);
-        spiritActor.data["img"] = "Content/Tokens/Monster/" + spiritType + "_spirit.png";
-        spiritActor.data.token["img"] = spiritActor.data["img"];
+        spiritActor.data["img"] = tokenPaths[spiritType];
+        spiritActor.data.token["img"] = tokenPaths[spiritType];
 
         spiritActor.data.permission[Gamepad.userID] = 3;
         
-        canvas.tokens.dropActor(spiritActor,  {
-            x: canvas.tokens.controlled[0].actor.token.data.x,
-            y: canvas.tokens.controlled[0].actor.token.data.y + 100
-          });
 
+        //Grab reference to player's character (if user is player) or selected token (if user is gm)
         let summoningActor;
-        //if (game.user.character)
-        //{
-            //summoningActor = game.user.character.actor;
-        //}
-        //else (canvas.tokens.controlled.length > 0)
-        //{
-            //summoningActor = canvas.tokens.controlled[0].actor;
-        //}
-        //if (summoningActor != null)
-        drainRoll(summoningActor, spiritActor, force);
+        if (game.user.character)
+        {
+            summoningActor = game.user.character.actor;
+        }
+        else (canvas.tokens.controlled.length > 0)
+        {
+            summoningActor = canvas.tokens.controlled[0].actor;
+        }
         
+        // spawn a token and roll a resist roll from it, 
+        // UNLESS no summoning actor has been found (probably cause user is a gm and doesnt have anything selected)
+        if (summoningActor != null)
+        {
+            canvas.tokens.dropActor(spiritActor,  {
+                x: canvas.tokens.controlled[0].actor.token.data.x,
+                y: canvas.tokens.controlled[0].actor.token.data.y + 100
+            });
+            resistRoll(spiritActor, force);
+        }
     };
 
-    
+    //initial dialogue
     let d = new Dialog({
         title: "Summoning",
         content:`<form><div class="form-group"><label>Force</label><input id='force' value='1'></input></div><div class="form-group"><label>Number</label>
@@ -482,4 +500,4 @@ async function macroAsync() {
 d.render(true);
 }
 
-macroAsync();
+mainAsync();
