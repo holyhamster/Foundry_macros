@@ -1,4 +1,7 @@
 # Macro for summoning spirits in Shadowrun 5E system on FoundryVTT
+
+Creates a spirit of chosen type and force, fills attributes, skills and powers into the sheet, spawns a token near the summoner. Most powers that require a roll have an action attached to it (can be used by pressing power's icon on spirit's character sheet).
+
 Notes:
 1. You can set default images for spirit tokens by providing file paths at the beginning of the script.
 2. User requires "create actor" and "create token" persmissions.
