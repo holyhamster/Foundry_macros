@@ -8,17 +8,19 @@ const guardianString = 'Guardian';
 const guidanceString = 'Guidance';
 const plantString = 'Plant';
 const taskString = 'Task';
+
 //write in here your paths for default icons
 const tokenPaths = {
-    fireString: "Content/Tokens/Monster/Fire_spirit.png",
-    waterString: "Content/Tokens/Monster/Water_spirit.png",
-    airString: "Content/Tokens/Monster/Air_spirit.png",
-    earthString: "Content/Tokens/Monster/Earth_spirit.png",
-    manString: "Content/Tokens/Monster/Man_spirit.png",
-    beastString: "Content/Tokens/Monster/Beast_spirit.png",
-    guardianString: "Content/Tokens/Monster/Guardian_spirit.png",
-    plantString: "Content/Tokens/Monster/Plant_spirit.png",
-    taskString: "Content/Tokens/Monster/Task_spirit.png",};
+    [fireString]: "Content/Tokens/Monster/Fire_spirit.png",
+    [waterString]: "Content/Tokens/Monster/Water_spirit.png",
+    [airString]: "Content/Tokens/Monster/Air_spirit.png",
+    [earthString]: "Content/Tokens/Monster/Earth_spirit.png",
+    [manString]: "Content/Tokens/Monster/Man_spirit.png",
+    [beastString]: "Content/Tokens/Monster/Beast_spirit.png",
+    [guardianString]: "Content/Tokens/Monster/Guardian_spirit.png",
+    [plantString]: "Content/Tokens/Monster/Plant_spirit.png",
+    [taskString]: "Content/Tokens/Monster/Task_spirit.png"
+};
 
 Math.clip = function (number, min, max) {
     return Math.max(min, Math.min(number, max));
@@ -76,7 +78,7 @@ function getSpiritStats(spiritType) {
             };
         case taskString:
             return {
-                reaction: 2, strength: 2, 
+                reaction: 2, strength: 2,
                 artisan: true, assensing: true, astral_combat: true, perception: true, unarmed_combat: true
             };
         default:
@@ -87,12 +89,12 @@ function getSpiritStats(spiritType) {
 //list of spirit powers
 function getSpiritPowers(spiritType, force) {
     let getPowers = function (normalPowers, optionalPowers, spiritType, force) {
+
         let powers = [];
         for (let normalPower of normalPowers)
-        powers.push(getPowerData(normalPower, spiritType, force));
-    
-        for (let optionalPower of optionalPowers)
-        {
+            powers.push(getPowerData(normalPower, spiritType, force));
+
+        for (let optionalPower of optionalPowers) {
             let pwr = getPowerData(optionalPower, spiritType, force);
             pwr["name"] = pwr["name"] + " (Optional)";
             powers.push(pwr);
@@ -104,48 +106,47 @@ function getSpiritPowers(spiritType, force) {
         case fireString:
             return getPowers(
                 ["accident", "astral_form", "confusion", "elemental_attack", "energy_aura", "engulf", "materialization", "sapience",],
-                ["fear", "guard", "noxious_breath", "search"], spiritType, force);
+                ["fear", "guard", "noxious_breath", "search"], spiritType, force);
         case airString:
             return getPowers(
-                ["accident", "astral_form", "concealment", "confusion", "engulf", "materialization", "movement", "sapience", "search"], 
-                ["elemental_attack", "energy_aura", "fear", "guard", "noxious_breath", "psychokinesis"], spiritType, force);
+                ["accident", "astral_form", "concealment", "confusion", "engulf", "materialization", "movement", "sapience", "search"],
+                ["elemental_attack", "energy_aura", "fear", "guard", "noxious_breath", "psychokinesis"], spiritType, force);
         case earthString:
             return getPowers(
-                ["astral_form", "binding", "guard", "materialization", "movement", "sapience", "search"],
-                ["concealment", "confusion", "engulf", "elemental_attack", "fear"], spiritType, force);
+                ["astral_form", "binding", "guard", "materialization", "movement", "sapience", "search"],
+                ["concealment", "confusion", "engulf", "elemental_attack", "fear"], spiritType, force);
         case beastString:
             return getPowers(
-                ["animal_control", "astral_form", "enhanced_senses", "fear", "materialization", "movement", "sapience"],
-                ["concealment", "confusion", "guard", "natural_weapon", "noxious_breath", "search", "venom"], spiritType, force);
+                ["animal_control", "astral_form", "enhanced_senses", "fear", "materialization", "movement", "sapience"],
+                ["concealment", "confusion", "guard", "natural_weapon", "noxious_breath", "search", "venom"], spiritType, force);
         case manString:
             return getPowers(
-                ["accident", "astral_form", "concealment", "confusion", "enhanced_senses", "guard", "influence", "materialization", "sapience", "search"],
+                ["accident", "astral_form", "concealment", "confusion", "enhanced_senses", "guard", "influence", "materialization", "sapience", "search"],
                 ["fear", "innate_spell", "movement", "psychokinesis"], spiritType, force);
         case waterString:
             return getPowers(
-                ["astral_form", "concealment", "confusion", "engulf", "materialization", "movement", "sapience", "search"],
-                ["accident", "binding", "elemental_attack", "energy_aura", "guard", "weather control"], spiritType, force);
+                ["astral_form", "concealment", "confusion", "engulf", "materialization", "movement", "sapience", "search"],
+                ["accident", "binding", "elemental_attack", "energy_aura", "guard", "weather_control"], spiritType, force);
         case guardianString:
             return getPowers(
-                ["astral_form", "fear", "guard", "magical_guard", "materialization", "movement", "sapience" ],
-                ["animal_control", "concealment", "elemental_attack",  "natural_weapon",  "psychokinesis", "combat_skill" ], spiritType, force);
+                ["astral_form", "fear", "guard", "magical_guard", "materialization", "movement", "sapience"],
+                ["animal_control", "concealment", "elemental_attack", "natural_weapon", "psychokinesis", "combat_skill"], spiritType, force);
         case guidanceString:
             return getPowers(
-                ["astral_form",  "confusion", "divining", "guard", "magical_guard", "materialization", "sapience", "search", "shadow_cloak"],
+                ["astral_form", "confusion", "divining", "guard", "magical_guard", "materialization", "sapience", "search", "shadow_cloak"],
                 ["engulf", "enhanced_senses", "fear", "influence"], spiritType, force);
         case plantString:
             return getPowers(
-                [],
-                [], spiritType, force);
+                ["astral_form", "concealment", "engulf", "fear", "guard", "magical_guard", "materialization", "sapience", "silence"],
+                ["accident", "confusion", "movement", "noxious_breath", "search"], spiritType, force);
         case taskString:
             return getPowers(
-                [],
-                [], spiritType, force);
+                ["accident", "astral_form", "binding", "materialization", "movement", "sapience", "search"],
+                ["concealment", "enhanced_senses", "influence", "psychokinesis", "technical_skill"], spiritType, force);
     }
 }
-MG, combat skill, divining, shadow_cloak, enhanced_senses2
 
-//data for power's actions
+//data for powers' actions
 function getPowerData(name, spiritType, force) {
     switch (name) {
         case "accident":
@@ -165,21 +166,28 @@ function getPowerData(name, spiritType, force) {
                 data: {
                     description: { source: "CRB394" }
                 }
-            }
+            };
         case "astral_form":
             return {
                 name: "Astral Form", type: "adept_power",
                 data: {
                     description: { source: "CRB394" }
                 }
-            }
+            };
         case "binding":
-                return {
-                    name: "Binding", type: "adept_power",
-                    data: {
-                        description: { source: "CRB395" },
-                    }
+            return {
+                name: "Binding", type: "adept_power",
+                data: {
+                    description: { source: "CRB395" },
                 }
+            };
+        case "combat_skill":
+            return {
+                name: "Any combat skill", type: "adept_power",
+                data: {
+                    description: { source: "SG 193" },
+                }
+            };
         case "confusion":
             return {
                 name: "Confusion", type: "adept_power",
@@ -190,14 +198,24 @@ function getPowerData(name, spiritType, force) {
                         opposed: { type: "custom", attribute: "willpower", attribute2: "logic" }
                     }
                 }
-            }
+            };
         case "concealment":
             return {
                 name: "Concealment", type: "adept_power",
                 data: {
                     description: { source: "CRB395" }
                 }
-            }
+            };
+        case "divining":
+            return {
+                name: "Confusion", type: "adept_power",
+                data: {
+                    description: { source: "SG194" },
+                    action: {
+                        type: "complex", attribute: "magic", attribute2: "intuition"
+                    }
+                }
+            };
         //TODO: add damage element if applicable
         case "elemental_attack":
             return {
@@ -211,7 +229,7 @@ function getPowerData(name, spiritType, force) {
                         damage: { type: "physical", base: force, attribute: "magic", ap: { base: force } }// element: spiritType }
                     }
                 }
-            }
+            };
         case "energy_aura":
             return {
                 name: "Energy Aura", type: "adept_power",
@@ -224,7 +242,7 @@ function getPowerData(name, spiritType, force) {
                         damage: { type: "physical", base: force, attribute: "strength", ap: { base: force } }
                     }
                 }
-            }
+            };
         case "engulf":
             return {
                 name: "Engulf", type: "adept_power",
@@ -237,14 +255,14 @@ function getPowerData(name, spiritType, force) {
                         damage: { type: "physical", base: force, attribute: "magic", ap: { base: force } }
                     }
                 }
-            }
+            };
         case "enhanced_senses":
-                return {
-                    name: "Enhanced Senses(Hearing, Low-light, Smell)", type: "adept_power",
-                    data: {
-                        description: { source: "CRB396" },
-                    }
+            return {
+                name: "Enhanced Senses(Hearing, Low-light, Smell)", type: "adept_power",
+                data: {
+                    description: { source: "CRB396" },
                 }
+            };
         case "fear":
             return {
                 name: "Fear", type: "adept_power",
@@ -255,21 +273,28 @@ function getPowerData(name, spiritType, force) {
                         opposed: { type: "custom", attribute: "willpower", attribute2: "logic" }
                     }
                 }
-            }
+            };
         case "guard":
             return {
                 name: "Guard", type: "adept_power",
                 data: {
                     description: { source: "CRB397" }
                 }
-            }
+            };
+        case "magical_guard":
+            return {
+                name: "Magical Guard", type: "adept_power",
+                data: {
+                    description: { source: "SG 196" },
+                }
+            };
         case "materialization":
             return {
                 name: "Materialization", type: "adept_power",
                 data: {
                     description: { source: "CRB398" }
                 }
-            }
+            };
         case "movement":
             return {
                 name: "Movement", type: "adept_power",
@@ -287,7 +312,7 @@ function getPowerData(name, spiritType, force) {
                 data: {
                     description: { source: "CRB399" }
                 }
-            }
+            };
         case "noxious_breath":
             return {
                 name: "Noxious Breath", type: "adept_power",
@@ -299,7 +324,7 @@ function getPowerData(name, spiritType, force) {
                         limit: { attribute: "physical" }
                     }
                 }
-            }
+            };
         case "psychokinesis":
             return {
                 name: "Psychokinesis", type: "adept_power",
@@ -320,24 +345,24 @@ function getPowerData(name, spiritType, force) {
                         opposed: { type: "custom", attribute: "willpower", attribute2: "logic" }
                     }
                 }
-            }
-            case "innate_spell":
-                return {
-                    name: "Innate Spell", type: "adept_power",
-                    data: {
-                        description: { source: "CRB398" },
-                        action: {
-                            type: "complex", skill: "spellcasting", attribute: "magic"
-                        }
+            };
+        case "innate_spell":
+            return {
+                name: "Innate Spell", type: "adept_power",
+                data: {
+                    description: { source: "CRB398" },
+                    action: {
+                        type: "complex", skill: "spellcasting", attribute: "magic"
                     }
-                };
+                }
+            };
         case "sapience":
             return {
                 name: "Sapience", type: "adept_power",
                 data: {
                     description: { source: "CRB400" }
                 }
-            }
+            };
         case "search":
             return {
                 name: "Search", type: "adept_power",
@@ -347,15 +372,36 @@ function getPowerData(name, spiritType, force) {
                         type: "complex", attribute: "intuition", attribute2: "magic", extended: true
                     }
                 }
-            }
+            };
+        case "shadow_cloak":
+            return {
+                name: "Shadow Cloak", type: "adept_power",
+                data: {
+                    description: { source: "SG198" }
+                }
+            };
+        case "silence":
+            return {
+                name: "Silence", type: "adept_power",
+                data: {
+                    description: { source: "SG199" }
+                }
+            };
+        case "technical_skill":
+            return {
+                name: "Any technical or physical Skill", type: "adept_power",
+                data: {
+                    description: { source: "SG 193" },
+                }
+            };
         //TODO: add rollable action
         case "venom":
-                return {
-                    name: "Venom", type: "adept_power",
-                    data: {
-                        description: { source: "CRB401" }
-                    }
+            return {
+                name: "Venom", type: "adept_power",
+                data: {
+                    description: { source: "CRB401" }
                 }
+            };
         case "weather_control":
             return {
                 name: "Weather Control", type: "adept_power",
@@ -365,22 +411,22 @@ function getPowerData(name, spiritType, force) {
                         type: "complex", attribute: "willpower", attribute2: "magic", extended: true
                     }
                 }
-            }
+            };
         default:
             return { name: "Undefined", type: "adept_power" };
     }
 }
 
 //simple roll in chat to resist the summoning
-async function resistRoll(spirit, force)
-{
+async function resistRoll(spirit, force) {
     game.shadowrun5e.DiceSR.d6({
         actor: spirit,
-        event: {shiftKey: true, altKey:true},
+        event: { shiftKey: true, altKey: false },
         count: force,
-        dialogOptions: {prompt:true},
+        dialogOptions: { prompt: true },
         wounds: false,
-        title: "Summoning Resistance"});
+        title: "Summoning Resistance"
+    });
 
 }
 
@@ -401,14 +447,14 @@ async function mainAsync() {
             data: {
                 special: "magic",
                 attributes: {
-                    body: { base: Math.clip("body" in attributes? attributes["body"] + force: force, 1, 99) },
-                    agility: { base: Math.clip("agility" in attributes? attributes["agility"] + force: force, 1, 99) },
-                    reaction: { base: Math.clip("reaction" in attributes? attributes["reaction"] + force: force, 1, 99) },
-                    strength: { base: Math.clip("strength" in attributes? attributes["strength"] + force: force, 1, 99) },
-                    willpower: { base: Math.clip("willpower" in attributes? attributes["willpower"] + force: force, 1, 99) },
-                    logic: { base: Math.clip("logic" in attributes? attributes["logic"] + force: force, 1, 99) },
-                    intuition: { base: Math.clip("intuition" in attributes? attributes["intuition"] + force: force, 1, 99) },
-                    charisma: { base: Math.clip("charisma" in attributes? attributes["charisma"] + force: force, 1, 99) },
+                    body: { base: Math.clip("body" in attributes ? attributes["body"] + force : force, 1, 99) },
+                    agility: { base: Math.clip("agility" in attributes ? attributes["agility"] + force : force, 1, 99) },
+                    reaction: { base: Math.clip("reaction" in attributes ? attributes["reaction"] + force : force, 1, 99) },
+                    strength: { base: Math.clip("strength" in attributes ? attributes["strength"] + force : force, 1, 99) },
+                    willpower: { base: Math.clip("willpower" in attributes ? attributes["willpower"] + force : force, 1, 99) },
+                    logic: { base: Math.clip("logic" in attributes ? attributes["logic"] + force : force, 1, 99) },
+                    intuition: { base: Math.clip("intuition" in attributes ? attributes["intuition"] + force : force, 1, 99) },
+                    charisma: { base: Math.clip("charisma" in attributes ? attributes["charisma"] + force : force, 1, 99) },
                     edge: { base: Math.floor(force / 2) },
                     magic: { base: force }
                 },
@@ -430,37 +476,38 @@ async function mainAsync() {
                 },
                 modifiers: {
                     armor: force * 2,
-                    initiative: "initiative" in attributes? attributes["initiative"] : 0,
+                    initiative: "initiative" in attributes ? attributes["initiative"] : 0,
                     initiative_dice: 1
                 }
             }
 
         })
 
-        for (let powerData of getSpiritPowers(spiritType, force))
-            spiritActor.createOwnedItem(powerData);
+
+        for (let powerData of getSpiritPowers(spiritType, force)) {
+    
+            await spiritActor.createOwnedItem(powerData);
+        }
+
         spiritActor.data["img"] = tokenPaths[spiritType];
         spiritActor.data.token["img"] = tokenPaths[spiritType];
-
         spiritActor.data.permission[Gamepad.userID] = 3;
-        
+
 
         //Grab reference to player's character (if user is player) or selected token (if user is gm)
         let summoningActor;
-        if (game.user.character)
-        {
+        if (game.user.character) {
             summoningActor = game.user.character.actor;
         }
         else (canvas.tokens.controlled.length > 0)
         {
             summoningActor = canvas.tokens.controlled[0].actor;
         }
-        
+
         // spawn a token and roll a resist roll from it, 
         // UNLESS no summoning actor has been found (probably cause user is a gm and doesnt have anything selected)
-        if (summoningActor != null)
-        {
-            canvas.tokens.dropActor(spiritActor,  {
+        if (summoningActor != null) {
+            canvas.tokens.dropActor(spiritActor, {
                 x: canvas.tokens.controlled[0].actor.token.data.x,
                 y: canvas.tokens.controlled[0].actor.token.data.y + 100
             });
@@ -484,20 +531,20 @@ async function mainAsync() {
         <option value =${plantString}>${plantString}</option>
         <option value =${taskString}>${taskString}</option>
         </select></div></form>`,
-            buttons: {
-        one: {
-            label: "Ok",
-            callback: html => summon(html)
+        buttons: {
+            one: {
+                label: "Ok",
+                callback: html => summon(html)
+            },
+            two: {
+                label: "Cancel",
+                callback: html => console.log("SKILL-MACRO: Cancelled")
+            }
         },
-        two: {
-            label: "Cancel",
-            callback: html => console.log("SKILL-MACRO: Cancelled")
-        }
-    },
         close: html => console.log()
-  });
+    });
 
-d.render(true);
+    d.render(true);
 }
 
 mainAsync();
