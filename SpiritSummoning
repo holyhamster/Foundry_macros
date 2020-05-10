@@ -18,6 +18,7 @@ const tokenPaths = {
     [manString]: "Content/Tokens/Monster/Man_spirit.png",
     [beastString]: "Content/Tokens/Monster/Beast_spirit.png",
     [guardianString]: "Content/Tokens/Monster/Guardian_spirit.png",
+    [guidanceString]: "Content/Tokens/Monster/Guidance_spirit.png",
     [plantString]: "Content/Tokens/Monster/Plant_spirit.png",
     [taskString]: "Content/Tokens/Monster/Task_spirit.png"
 };
@@ -476,6 +477,7 @@ async function mainAsync() {
                 },
                 modifiers: {
                     armor: force * 2,
+                    essence: force - 6,
                     initiative: "initiative" in attributes ? attributes["initiative"] : 0,
                     initiative_dice: 1
                 }
@@ -491,6 +493,9 @@ async function mainAsync() {
 
         spiritActor.data["img"] = tokenPaths[spiritType];
         spiritActor.data.token["img"] = tokenPaths[spiritType];
+        //lower sets the token size relative to its force
+        spiritActor.data.token["width"] = 0.1 * force + 0.4;
+        spiritActor.data.token["height"] = 0.1 * force + 0.4;
         spiritActor.data.permission[Gamepad.userID] = 3;
 
 
@@ -508,7 +513,7 @@ async function mainAsync() {
         // UNLESS no summoning actor has been found (probably cause user is a gm and doesnt have anything selected)
         if (summoningActor != null) {
             canvas.tokens.dropActor(spiritActor, {
-                x: canvas.tokens.controlled[0].actor.token.data.x,
+                x: canvas.tokens.controlled[0].actor.token.data.x + Math.floor(Math.random() * 100 - 50),
                 y: canvas.tokens.controlled[0].actor.token.data.y + 100
             });
             resistRoll(spiritActor, force);
