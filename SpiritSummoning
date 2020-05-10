@@ -499,12 +499,9 @@ async function mainAsync() {
         spiritActor.data.permission[Gamepad.userID] = 3;
 
 
-        //Grab reference to player's character (if user is player) or selected token (if user is gm)
+
         let summoningActor;
-        if (game.user.character) {
-            summoningActor = game.user.character.actor;
-        }
-        else (canvas.tokens.controlled.length > 0)
+        if (canvas.tokens.controlled.length > 0)
         {
             summoningActor = canvas.tokens.controlled[0].actor;
         }
@@ -513,8 +510,8 @@ async function mainAsync() {
         // UNLESS no summoning actor has been found (probably cause user is a gm and doesnt have anything selected)
         if (summoningActor != null) {
             canvas.tokens.dropActor(spiritActor, {
-                x: canvas.tokens.controlled[0].actor.token.data.x + Math.floor(Math.random() * 100 - 50),
-                y: canvas.tokens.controlled[0].actor.token.data.y + 100
+                x: summoningActor.token.data.x + Math.floor(Math.random() * 100 - 50),
+                y: summoningActor.token.data.y + 100
             });
             resistRoll(spiritActor, force);
         }
